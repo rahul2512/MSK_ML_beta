@@ -362,7 +362,7 @@ def run_final_model(data,hyper_arg,hyper_val,model_class):
     save_model= True
     try:
         print("Plot created for the following index --- ",hyper_arg)#,hyper_val)
-        label = '.fm.'
+        label = '.fm'
         save_outputs(model, hyper_arg, X_Train, Y_Train, X_Test, Y_Test, data.feature, data.subject, label, save_model, model_class)
         combined_plot_2(model,model,X_Test,Y_Test,X_Test,Y_Test,data.feature,False,model_class)
         print("-----------------------------------","\n")
