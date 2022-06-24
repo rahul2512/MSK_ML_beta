@@ -306,19 +306,18 @@ def create_PC_data(model,X1,Y2):    ###obselete now
         PC[i] = np.around(scipy.stats.pearsonr(Y1[:,i],Y2[:,i])[0],3)
     return PC
 
-def save_outputs(subject_condition,model,hyper_val, X_Train, Y_Train, X_val, Y_val, X_test, Y_test,label):
+def save_outputs(model,hyper_val, X_Train, Y_Train, X_val, Y_val, feature, subject, enum, save_model):
+    #   save_outputs(model, hyper_val, X_Train, Y_Train, X_Test, Y_Test, data.feature,data.subject, enum)
     train_error = create_PC_data(model,X_Train, Y_Train)
-    val_error = create_PC_data(model,X_val, Y_val)
-    test_error = create_PC_data(model,X_test, Y_test)
+    val_error = create_PC_data(model,X_val, Y_val)   ## it is test error in case of final model
     mse = np.zeros(np.shape(train_error)[0])
     mse[0] = model.evaluate(X_Train, Y_Train,verbose=0)[0]
     mse[1] = model.evaluate(X_val, Y_val,verbose=0)[0]
-    mse[2] = model.evaluate(X_test, Y_test,verbose=0)[0]
-    out = np.vstack([mse,train_error, val_error, test_error])
+    out = np.vstack([mse,train_error, val_error])
     out = np.nan_to_num(out, nan=0, posinf=2222)
-    np.savetxt('./text_out/'+subject_condition+'_'+label+'.txt',out,fmt='%1.6f')
-    if 'comp' in label:    ### only saves the model in the final run not in cross validation
-        model.save('./model_out/'+subject_condition+'_'+label+'.h5')
+    np.savetxt('./text_out/stat_'+ feature + '_' + subject +'.'+ 'hv_'+ str(hyper_val)   +'.CV_'+str(enum)+'.txt',out,fmt='%1.6f')
+    if save_model == True:
+        model.save('./model_out/model_'+ feature + '_' + subject +'.'+ 'hv_'+ str(hyper_val) + '.h5')
     return None
 
 def run_NN(X_Train, Y_Train, X_val, Y_val,hyper_val,model_class):
@@ -343,12 +342,14 @@ def run_NN(X_Train, Y_Train, X_val, Y_val,hyper_val,model_class):
     history = model.fit(X_Train, Y_Train, validation_data = (X_val,Y_val),epochs=epoch, batch_size=batch_size, verbose=2,shuffle=True)
     return model
 
-def run_cross_valid(subject_condition,which,hyper_arg,hyper_val,k_fold,pca,scale_out, model_class):
-    for k in range(k_fold):
-        X_Train, Y_Train, X_val, Y_val, X_test, Y_test = split_validation_data(subject_condition,which,pca,scale_out,k)     ###### k index is required for subject_naive case
-        model = run_NN(X_Train, Y_Train, X_val, Y_val, hyper_val, which, model_class)
-        save_outputs(subject_condition,model, hyper_val, X_Train, Y_Train, X_val, Y_val, X_test, Y_test,label=which+'_hyper_'+str(hyper_arg)+'_k_fold_'+str(k))
-    return None
+def run_cross_valid(data,hyper_arg,hyper_val,model_class):
+    save_model= False
+    Da = [data.cv1, data.cv2, data.cv3, data.cv4]
+    for enum,d in enumerate(Da):
+        X_Train, Y_Train, X_Test, Y_Test = d['train_in'], d['train_out'], d['val_in'], d['val_out']
+        model = run_NN(X_Train, Y_Train, X_Test, Y_Test, hyper_val,  model_class)
+        save_outputs(model, hyper_arg, X_Train, Y_Train, X_Test, Y_Test, data.feature, data.subject, enum, save_model)
+    return model
 
 def run_final_model(data,hyper_arg,hyper_val,model_class):
 	X_Train, Y_Train, X_Test, Y_Test = data.train_in, data.train_out, data.test_in, data.test_out
