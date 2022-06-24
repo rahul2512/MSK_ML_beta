@@ -306,7 +306,7 @@ def create_PC_data(model,X1,Y2):    ###obselete now
         PC[i] = np.around(scipy.stats.pearsonr(Y1[:,i],Y2[:,i])[0],3)
     return PC
 
-def save_outputs(model,hyper_val, X_Train, Y_Train, X_val, Y_val, feature, subject, enum, save_model):
+def save_outputs(model,hyper_val, X_Train, Y_Train, X_val, Y_val, feature, subject, label, save_model ,model_class):
     #   save_outputs(model, hyper_val, X_Train, Y_Train, X_Test, Y_Test, data.feature,data.subject, enum)
     train_error = create_PC_data(model,X_Train, Y_Train)
     val_error = create_PC_data(model,X_val, Y_val)   ## it is test error in case of final model
@@ -315,9 +315,9 @@ def save_outputs(model,hyper_val, X_Train, Y_Train, X_val, Y_val, feature, subje
     mse[1] = model.evaluate(X_val, Y_val,verbose=0)[0]
     out = np.vstack([mse,train_error, val_error])
     out = np.nan_to_num(out, nan=0, posinf=2222)
-    np.savetxt('./text_out/stat_'+ feature + '_' + subject +'.'+ 'hv_'+ str(hyper_val)   +'.CV_'+str(enum)+'.txt',out,fmt='%1.6f')
+    np.savetxt('./text_out/stat_'+ model_class + '_'  +feature + '_' + subject +'.'+ 'hv_'+ str(hyper_val) + label +'.txt',out,fmt='%1.6f')
     if save_model == True:
-        model.save('./model_out/model_'+ feature + '_' + subject +'.'+ 'hv_'+ str(hyper_val) + '.h5')
+        model.save('./model_out/model_' + model_class + '_' + feature + '_' + subject +'.'+ 'hv_'+ str(hyper_val) + '.h5')
     return None
 
 def run_NN(X_Train, Y_Train, X_val, Y_val,hyper_val,model_class):
@@ -344,26 +344,32 @@ def run_NN(X_Train, Y_Train, X_val, Y_val,hyper_val,model_class):
 
 def run_cross_valid(data,hyper_arg,hyper_val,model_class):
     save_model= False
+
     Da = [data.cv1, data.cv2, data.cv3, data.cv4]
-    for enum,d in enumerate(Da):
-        X_Train, Y_Train, X_Test, Y_Test = d['train_in'], d['train_out'], d['val_in'], d['val_out']
-        model = run_NN(X_Train, Y_Train, X_Test, Y_Test, hyper_val,  model_class)
-        save_outputs(model, hyper_arg, X_Train, Y_Train, X_Test, Y_Test, data.feature, data.subject, enum, save_model)
-    return model
+    try:
+        for enum,d in enumerate(Da):
+            X_Train, Y_Train, X_Test, Y_Test = d['train_in'], d['train_out'], d['val_in'], d['val_out']
+            model = run_NN(X_Train, Y_Train, X_Test, Y_Test, hyper_val,  model_class)
+            label = '.CV_'+str(enum)
+            save_outputs(model, hyper_arg, X_Train, Y_Train, X_Test, Y_Test, data.feature, data.subject, label, save_model, model_class)
+    except:
+        None
+    return None
 
 def run_final_model(data,hyper_arg,hyper_val,model_class):
-	X_Train, Y_Train, X_Test, Y_Test = data.train_in, data.train_out, data.test_in, data.test_out
-	model = run_NN(X_Train, Y_Train, X_Test, Y_Test, hyper_val,  model_class)
-#	save_outputs(subject_condition,model, hyper_val, X_Train, Y_Train,X_Test, Y_Test, X_Test, Y_Test,label='comp'+which+'_hyper_'+str(hyper_arg)+'_')
-	try:
-		print("Plot created for the following index --- ",hyper_arg)#,hyper_val)
-		save_outputs(data.subject,model,hyper_val, X_Train, Y_Train, X_Test, Y_Test, X_test, Y_test,'JRF')
-		combined_plot_2(model,model,X_Test,Y_Test,X_Test,Y_Test,'JRF',False,model_class)	
-		print("-----------------------------------","\n")
-	except:
-		print("this index is creating problem in printing --- ",hyper_arg,hyper_val )
-		print("-----------------------------------","\n")
-	return model
+    X_Train, Y_Train, X_Test, Y_Test = data.train_in, data.train_out, data.test_in, data.test_out
+    model = run_NN(X_Train, Y_Train, X_Test, Y_Test, hyper_val,  model_class)
+    save_model= True
+    try:
+        print("Plot created for the following index --- ",hyper_arg)#,hyper_val)
+        label = '.fm.'
+        save_outputs(model, hyper_arg, X_Train, Y_Train, X_Test, Y_Test, data.feature, data.subject, label, save_model, model_class)
+        combined_plot_2(model,model,X_Test,Y_Test,X_Test,Y_Test,data.feature,False,model_class)
+        print("-----------------------------------","\n")
+    except:
+        print("this index is creating problem in printing --- ",hyper_arg,hyper_val )
+        print("-----------------------------------","\n")
+    return model
 
 def create_final_model(hyper_arg,hyper_val,which,pca,scale_out, model_class):
 	model = run_final_model(which,hyper_arg,hyper_val,pca,scale_out, model_class)
