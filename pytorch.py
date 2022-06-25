@@ -25,7 +25,7 @@ from scipy.interpolate import interp1d
 
     
     
-def combined_plot_2(model1,model2,X_Test1,Y_Test1,X_Test2,Y_Test2,label,scale_out,model_class):
+def combined_plot_2(model1,model2,X_Test1,Y_Test1,X_Test2,Y_Test2,label,model_class):
     ## Need to think about computing each trial separately and how that affects the output
     print("\n plotting results -----------------------")
     RMSE_list, PC_list = [],[]
@@ -82,7 +82,7 @@ def combined_plot_2(model1,model2,X_Test1,Y_Test1,X_Test2,Y_Test2,label,scale_ou
                   'Elbow \n Anteroposterior', 'Wrist \n Mediolateral', 'Wrist \n Proximodistal', 'Wrist \n Anteroposterior']
         plot_list = ['(a)','(b)','(c)','(d)','(e)','(f)','(g)','(h)','(i)','(j)','(k)','(l)']
 
-    elif 'Muscle' in label:
+    elif 'MA' == label:
         fig = plt.figure(figsize=(8,4))
         gs1 = gridspec.GridSpec(215, 560)
         gs1.update(left=0.05, right=0.98,top=0.84, bottom=0.15)
@@ -142,7 +142,67 @@ def combined_plot_2(model1,model2,X_Test1,Y_Test1,X_Test2,Y_Test2,label,scale_ou
                   'Elbow Flexion / \n Extension', 'Elbow Pronation / \n Supination', 'Wrist Flexion / \n Extension', 'Wrist Radial / \n Ulnar Deviation']
         plot_list = ['(a)','(c)','(b)','(d)','(e)','(f)','(g)','(h)','(i)','(j)','(k)','(l)']
 
-    elif 'Angles' in label:
+    elif 'MF' == label:
+        fig = plt.figure(figsize=(8,4))
+        gs1 = gridspec.GridSpec(215, 560)
+        gs1.update(left=0.05, right=0.98,top=0.84, bottom=0.15)
+        d1, d2 =10, 10
+        ax00 = plt.subplot(gs1[0:100 -d2    , 0+d1:100  ])
+        ax01 = plt.subplot(gs1[0:100 -d2   , 150+d1:250 ])
+        ax10 = plt.subplot(gs1[115+d2:215  , 0+d1:100 ])
+        ax11 = plt.subplot(gs1[115+d2:215  , 150+d1:250 ])
+
+        ax02 = plt.subplot(gs1[0:100 -d2   , 310+d1:410 ])
+        ax03 = plt.subplot(gs1[0:100 -d2   , 460+d1:560 ])
+        ax12 = plt.subplot(gs1[115+d2:215  , 310+d1:410 ])
+        ax13 = plt.subplot(gs1[115+d2:215  , 460+d1:560 ])
+
+        ax_list = [ax00,ax01,ax10 ,ax11]
+        ax_list2= [ ax02,ax03, ax12 ,ax13 ]
+        ss,b_xlabel = 8,1
+        ylabel = ['Pectoralis major \n (Clavicle)','Biceps Brachii','Deltoid (Medial)','Brachioradialis']
+        plot_list = ['(a)','(b)','(c)','(d)','(e)','(f)','(g)','(h)','(i)','(j)','(k)','(l)']
+
+
+    elif 'JM' in label:
+        fig = plt.figure(figsize=(8,8.25))
+        gs1 = gridspec.GridSpec(580, 560)
+        gs1.update(left=0.065, right=0.98,top=0.945, bottom=0.08)
+        d1, d2 =10, 10
+        ax00 = plt.subplot(gs1[  0+d2:100  ,   0+d1:100 ])
+        ax01 = plt.subplot(gs1[  0+d2:100  , 150+d1:250 ])
+        ax10 = plt.subplot(gs1[120+d2:220  ,   0+d1:100 ])
+        ax11 = plt.subplot(gs1[120+d2:220  , 150+d1:250 ])
+        ax20 = plt.subplot(gs1[240+d2:340  ,   0+d1:100 ])
+        ax21 = plt.subplot(gs1[240+d2:340  , 150+d1:250 ])
+        ax30 = plt.subplot(gs1[360+d2:460  ,   0+d1:100 ])
+        ax31 = plt.subplot(gs1[360+d2:460  , 150+d1:250 ])
+        ax40 = plt.subplot(gs1[480+d2:580  ,   0+d1:100 ])
+        ax41 = plt.subplot(gs1[480+d2:580  , 150+d1:250 ])
+
+        ax02 = plt.subplot(gs1[  0+d2:100  , 310+d1:410 ])
+        ax03 = plt.subplot(gs1[  0+d2:100  , 460+d1:560 ])
+        ax12 = plt.subplot(gs1[120+d2:220  , 310+d1:410 ])
+        ax13 = plt.subplot(gs1[120+d2:220  , 460+d1:560 ])
+        ax22 = plt.subplot(gs1[240+d2:340  , 310+d1:410 ])
+        ax23 = plt.subplot(gs1[240+d2:340  , 460+d1:560 ])
+        ax32 = plt.subplot(gs1[360+d2:460  , 310+d1:410 ])
+        ax33 = plt.subplot(gs1[360+d2:460  , 460+d1:560 ])
+        ax42 = plt.subplot(gs1[480+d2:580  , 310+d1:410 ])
+        ax43 = plt.subplot(gs1[480+d2:580  , 460+d1:560 ])
+
+        ax_list  = [ax00, ax10, ax01, ax11, ax20, ax21, ax30, ax31, ax40, ax41]
+        ax_list2 = [ax02, ax12, ax03, ax13, ax22, ax23, ax32, ax33, ax42, ax43]
+
+        ss,b_xlabel = 8,7
+
+
+        ylabel = [ 'Trunk Flexion / \n Extension', 'Trunk Internal / \n External Rotation', 'Trunk Right / \n Left Bending',
+                  'Shoulder Flexion / \n Extension', 'Shoulder Abduction / \n Adduction', 'Shoulder Internal / \n External Rotation',
+                  'Elbow Flexion / \n Extension', 'Elbow Pronation / \n Supination', 'Wrist Flexion / \n Extension', 'Wrist Radial / \n Ulnar Deviation']
+        plot_list = ['(a)','(c)','(b)','(d)','(e)','(f)','(g)','(h)','(i)','(j)','(k)','(l)']
+
+    elif 'JA' == label:
         new_order = [7,8,9,0,1,2,3,4,5,6] 
         YP1 = YP1[:,new_order]
         YP2 = YP2[:,new_order]
@@ -276,12 +336,17 @@ def combined_plot_2(model1,model2,X_Test1,Y_Test1,X_Test2,Y_Test2,label,scale_ou
         ax00.text(0.9, 1.35, "(I) Subject-exposed", transform=ax00.transAxes, size=ss+0.5,fontweight='bold')
         ax00.text(4.35, 1.35, "(II) Subject-naive", transform=ax00.transAxes, size=ss+0.5,fontweight='bold')
         
-    elif 'Angles' in label:
+    elif 'JA' == label:
         ax00.legend(fontsize=ss-1,loc='upper center',fancybox=True,ncol=1, frameon=True,framealpha=1, bbox_to_anchor=(3, 1.54))
         ax00.text(0.9, 1.35, "(I) Subject-exposed", transform=ax00.transAxes, size=ss+0.5,fontweight='bold')
         ax00.text(4.35, 1.35, "(II) Subject-naive", transform=ax00.transAxes, size=ss+0.5,fontweight='bold')
 
-    elif 'Muscle' in label:
+    elif 'MA' == label:
+        ax00.legend(fontsize=ss-1,loc='upper center',fancybox=True,ncol=1, frameon=True,framealpha=1, bbox_to_anchor=(2.95, 1.55))
+        ax00.text(0.94, 1.35, "(I) Subject-exposed", transform=ax00.transAxes, size=ss+0.5,fontweight='bold')
+        ax00.text(4.35, 1.35, "(II) Subject-naive", transform=ax00.transAxes, size=ss+0.5,fontweight='bold')
+
+    elif 'MF' == label:
         ax00.legend(fontsize=ss-1,loc='upper center',fancybox=True,ncol=1, frameon=True,framealpha=1, bbox_to_anchor=(2.95, 1.55))
         ax00.text(0.94, 1.35, "(I) Subject-exposed", transform=ax00.transAxes, size=ss+0.5,fontweight='bold')
         ax00.text(4.35, 1.35, "(II) Subject-naive", transform=ax00.transAxes, size=ss+0.5,fontweight='bold')
@@ -291,8 +356,6 @@ def combined_plot_2(model1,model2,X_Test1,Y_Test1,X_Test2,Y_Test2,label,scale_ou
         ax00.text(0.9, 1.35, "(I) Subject-exposed", transform=ax00.transAxes, size=ss+0.5,fontweight='bold')
         ax00.text(4.35, 1.35, "(II) Subject-naive", transform=ax00.transAxes, size=ss+0.5,fontweight='bold')
     
-    if scale_out == True:
-        label = label + '_scaled_out'
     fig.savefig('./plots_out/Both_sub'+'_'+model_class+'_'+label+'_combine'+'.pdf',dpi=600)
     plt.close()
 
@@ -339,7 +402,7 @@ def run_NN(X_Train, Y_Train, X_val, Y_val,hyper_val,model_class):
         model = initiate_Linear_model(inp_dim, out_dim, H_layer, num_nodes, act, p, lr, optim, loss, [metric], kinit,final_act,regularizer_val)
     elif model_class == 'LR':
         model = initiate_LR_model(inp_dim, out_dim, H_layer, num_nodes, act, p, lr, optim, loss, [metric], kinit,final_act,regularizer_val)
-    history = model.fit(X_Train, Y_Train, validation_data = (X_val,Y_val),epochs=epoch, batch_size=batch_size, verbose=2,shuffle=True)
+    history = model.fit(X_Train, Y_Train, validation_data = (X_val,Y_val),epochs=epoch, batch_size=batch_size, verbose=0,shuffle=True)
     return model
 
 def run_cross_valid(data,hyper_arg,hyper_val,model_class):
@@ -360,21 +423,24 @@ def run_final_model(data,hyper_arg,hyper_val,model_class):
     X_Train, Y_Train, X_Test, Y_Test = data.train_in, data.train_out, data.test_in, data.test_out
     model = run_NN(X_Train, Y_Train, X_Test, Y_Test, hyper_val,  model_class)
     save_model= True
+
     try:
-        print("Plot created for the following index --- ",hyper_arg)#,hyper_val)
         label = '.fm'
         save_outputs(model, hyper_arg, X_Train, Y_Train, X_Test, Y_Test, data.feature, data.subject, label, save_model, model_class)
-        combined_plot_2(model,model,X_Test,Y_Test,X_Test,Y_Test,data.feature,False,model_class)
-        print("-----------------------------------","\n")
     except:
-        print("this index is creating problem in printing --- ",hyper_arg,hyper_val )
-        print("-----------------------------------","\n")
+        print("this index is creating problem in saving --- ",hyper_arg,hyper_val, data.feature)
+
+    # try:
+    #     combined_plot_2(model,model,X_Test,Y_Test,X_Test,Y_Test,data.feature,model_class)
+    # except:
+    #     print("this index is creating problem in plotting --- ",hyper_arg,hyper_val, data.feature)
+    #     print("-----------------------------------","\n")
+
     return model
 
 def create_final_model(hyper_arg,hyper_val,which,pca,scale_out, model_class):
 	model = run_final_model(which,hyper_arg,hyper_val,pca,scale_out, model_class)
 	return model
-
 
 def load_model(subject_condition,hyper_arg,which):
     path = './model_out/'+subject_condition+'_comp'+which+'_hyper_'+str(hyper_arg)+'_.h5'  
@@ -386,7 +452,6 @@ def plot_saved_model(subject_condition,which,hyper_arg,hyper_val,pca,scale_out,m
 	model = load_model(subject_condition,hyper_arg,which)
 	try:
 		print("Plot created for the following index --- ")#,which,hyper_val,hyper_arg)
-# 		combined_plot(subject_condition,model,X_Train,Y_Train,"Train_"+which+"_"+str(hyper_arg),scale_out)
 		combined_plot(subject_condition,model,X_Test,Y_Test,"Test_"+which+"_"+str(hyper_arg),scale_out,model_class)
 		print("-----------------------------------","\n")
 	except:
@@ -400,7 +465,7 @@ def plot_saved_model2(which, hyper_arg1,hyper_val1, hyper_arg2,hyper_val2, pca,s
 	model2 = load_model('subject_naive' ,hyper_arg2,which)
 	try:
 		print("Plot created for the following index --- ",which,hyper_arg1,hyper_val1)
-		combined_plot_2(model1,model2,X_Test1,Y_Test1,X_Test2,Y_Test2,"Test_"+which+"_"+str(hyper_arg1)+"_"+str(hyper_arg2),scale_out,model_class)
+		combined_plot_2(model1,model2,X_Test1,Y_Test1,X_Test2,Y_Test2,"Test_"+which+"_"+str(hyper_arg1)+"_"+str(hyper_arg2),model_class)
 		print("-----------------------------------","\n")
 	except:
 		print("this index is creating problem in printing --- ",which,hyper_arg1,hyper_val1 )
