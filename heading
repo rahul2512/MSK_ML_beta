@@ -8,4 +8,4 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=rs25.iitr@gmail.com
 
-
+path='/work/lcvmm/rsharma/MSK/MSK_ML_beta/'

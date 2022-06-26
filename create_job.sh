@@ -1,14 +1,14 @@
 ##  1270080 total number of hyp
 rm jobs/job*slurm
 count=0
-for (( i=0; i<952560; i+=49 )) 
+for (( i=0; i<43741; i+=1 )) 
 do
 index=$[count/36+1]
 count=$[count+1]
-echo "python main.py" ${i} $[i+49] "&" >> job_${index}.slurm
+echo "python " '${path}'"/main.py" ${i} "&" >> job_${index}.slurm
 done 
 
-for index in {1..540}
+for index in {1..1216}
 do 
 touch tmp 
 cat heading  >>  tmp

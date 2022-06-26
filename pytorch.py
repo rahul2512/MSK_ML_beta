@@ -422,7 +422,7 @@ def run_cross_valid(data,hyper_arg,hyper_val,model_class):
 def run_final_model(data,hyper_arg,hyper_val,model_class):
     X_Train, Y_Train, X_Test, Y_Test = data.train_in, data.train_out, data.test_in, data.test_out
     model = run_NN(X_Train, Y_Train, X_Test, Y_Test, hyper_val,  model_class)
-    save_model= True
+    save_model= False
 
     try:
         label = '.fm'
