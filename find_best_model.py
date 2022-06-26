@@ -14,7 +14,7 @@ def read_k_fold_data(f):
 def estimate_validation_results(f):
 	data = read_k_fold_data(f)
 	avg_train_mse, avg_val_mse, avg_test_mse, avg_train_pc, avg_val_pc, avg_test_pc = [], [], [], [], [], []
-	for i in range(5):
+	for i in range(4):
 		avg_train_mse.append(data[i].iloc[0,0])	
 		avg_val_mse.append(data[i].iloc[0,1])
 		avg_test_mse.append(data[i].iloc[0,2])
@@ -53,13 +53,13 @@ def train_final_model(hyper_arg,which):
 
 
 ### total numer of hyperprmset space ---- 131220
-def run_final(which):
+def run_final(which, subject):
 	count=0
 	start=1000
-	for i in range(131220):
-		if  Path('text_out/Angles_hyper_'+str(i)+'_k_fold_4.txt').is_file():
-#			f='text_out/'+which+'_hyper_'+str(i)+'_k_fold_XXXX.txt'
-#			tmp = return_model(f,"avg_val_mse")
+	for i in range(1320):
+		f='text_out/stat_NN_'+which+'_'+ subject+'.hv_'+str(i)+'.CV_XXXX.txt'
+		tmp = return_model(f,"avg_val_mse")
+		print(i,tmp)
 #			if tmp < start:
 #				print("model_index = ",i,start,which)
 #				start = tmp
@@ -68,14 +68,7 @@ def run_final(which):
 #				print("XXXXXXXX-----",count,"-------XXXXXXXX")
 #				if count>10:
 #					train_final_model(i,which)
-			None
-		else:
-			None
-			print("python main.py",i, i+1,"&")
 
 
-#run_final("JRF")
-#run_final('Muscle')
-#run_final('JM')
-run_final('Angles')
+run_final("JRF",'naive')
 
