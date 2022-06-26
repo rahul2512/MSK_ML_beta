@@ -1,5 +1,5 @@
 # MSK_ML_beta
-# #This file contains the code corresponding to the article "Machine Learning for Musculoskeletal Modeling of Upper Extremity".
+# #This file contains the code corresponding to the article "Machine Learning to Map Inertial Motion Capture Inputs to Optical Motion Capture-driven Musculoskeletal Model Outputs".
 
 #A cluster was used to run cross-validation, so the code may require some changes to run on a laptop. Final model training can be easily done on a normal laptop using the function "train_final_model" in plot_results.py.
 
