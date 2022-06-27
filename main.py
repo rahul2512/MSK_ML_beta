@@ -8,7 +8,7 @@ from read_in_out import initiate_data
 import matplotlib.pyplot as plt
 import sys
 
-hyper_arg = int(sys.argv[1])
+hyper_arg =  int(sys.argv[1])
 path = '/Users/rsharma/Dropbox/Musculoskeletal_Modeling/MSK_ML_beta/'
 path = '/work/lcvmm/rsharma/MSK/MSK_ML_beta/'
 
@@ -18,7 +18,9 @@ hyper =  pd.read_csv(path+'hyperparam.txt',delimiter='\s+')
 hyper_val =  hyper.iloc[hyper_arg]
 
 for feat in ['JA','JM','JRF','MA','MF']:
-    tmp_data = data.subject_naive(feat)
+#    tmp_data = data.subject_naive(feat)
+    tmp_data = data.subject_exposed(feat)
+    print(feat)
     run_cross_valid(tmp_data,hyper_arg,hyper_val,'NN')
     run_final_model(tmp_data,hyper_arg,hyper_val,'NN')
 
