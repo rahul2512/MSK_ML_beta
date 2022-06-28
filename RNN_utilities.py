@@ -9,53 +9,41 @@ from torch.autograd import Variable
 from tensorflow import keras
 import sys
 from keras.regularizers import l2
+from keras.layers import Dense, SimpleRNN, LSTM, GRU
 # from ann_visualizer.visualize import ann_viz;
 
-
-### Initite NN model
-def initiate_NN_model(inp_dim,out_dim,nbr_Hlayer,Neu_layer,activation,p_drop,lr,optim,loss,metric,kinit,final_act,regularizer_val):
+def initiate_RNN_model(inp_dim, out_dim, units, loss, opt, act,final_act, metric, variant):
     model = keras.Sequential()
-    model.add(keras.layers.Dense(Neu_layer, input_shape=(inp_dim,), activation=activation))
-    for i in range(nbr_Hlayer):
-        model.add(keras.layers.Dense(Neu_layer, activation=activation,kernel_initializer=kinit))
-        model.add(keras.layers.Flatten())
-        model.add(keras.layers.Dropout(p_drop))
-    model.add(keras.layers.Dense(out_dim, activation=final_act))
-    try:
-        opt = optim(learning_rate=lr)
-    except:
-        opt = optim(lr=lr)
+    if variant == 'SimpleRNN':
+        model.add(SimpleRNN(units, input_shape=(None,inp_dim), activation=act)) 
+    elif variant == 'LSTM':
+        model.add(LSTM(units, input_shape=(None,inp_dim), activation=act)) 
+    elif variant == 'GRU':
+        model.add(GRU(units, input_shape=(None,inp_dim), activation=act)) 
+
+    model.add(Dense(out_dim, activation=final_act))
     model.compile(loss=loss, optimizer=opt, metrics=metric)
-    print("Initialised NN network")
+    print("Initialised RNN network")
     return model
 
-def initiate_Linear_model(inp_dim,out_dim,nbr_Hlayer,Neu_layer,activation,p_drop,lr,optim,loss,metric,kinit,final_act,regularizer_val):
-    #### rest of the parameters are redundnt but kept for generalisibilty of code
-    # model = keras.Sequential()
-    # model.add(keras.layers.Dense(out_dim, input_shape=(inp_dim,), activation='linear'))
-    try:
-        opt = optim(learning_rate=lr)
-    except:
-        opt = optim(lr=lr)
-    inputs = keras.layers.Input(shape=(inp_dim,))
-    outputs = keras.layers.Dense(out_dim)(inputs)
-    model = keras.models.Model(inputs=inputs, outputs=outputs)
-    model.compile(loss=loss, optimizer=opt, metrics=metric)
-    print("Initialised Linear network")
-    return model
+loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+opt="sgd"
+metric=["accuracy"]
 
+batch_size = 64
+units   = 64
+out_dim = 10
+inp_dim = 28
 
-def initiate_LR_model(inp_dim,out_dim,nbr_Hlayer,Neu_layer,activation,p_drop,lr,optim,loss,metric,kinit,final_act,regularizer_val):
-    #### rest of the parameters are redundnt but kept for generalisibilty of code
-    model = keras.Sequential()
-    model.add(keras.layers.Dense(out_dim, input_shape=(inp_dim,), activation='sigmoid'))
-    try:
-        opt = optim(learning_rate=lr)
-    except:
-        opt = optim(lr=lr)
-    model.compile(loss=loss, optimizer=opt, metrics=metric)
-    print("Initialised logistic regression network")
-    return model
+mnist = keras.datasets.mnist
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+x_train, x_test = x_train / 255.0, x_test / 255.0
+sample, sample_label = x_train[0], y_train[0]
+act = 'linear'
+final_act='linear'
+model = initiate_RNN_model(inp_dim, out_dim, units, loss, opt, act, final_act, metric,'SimpleRNN')
+model.fit(x_train, y_train, validation_data=(x_test, y_test), batch_size=batch_size, epochs=10)
+
 
 
 
@@ -70,19 +58,7 @@ def hyper_param():
 # random_uniform, random_normal, he_normal, xavier, glorot_uniform, glorot_normal (Xavier), 
     with open('hyperparam.txt', 'w') as f:
         print('optim', 'kinit', 'batch_size', 'epoch', 'act', 'num_nodes', 'H_layer', 'metric', 'loss', 'lr', 'p','regularizer_val', file=f)
-        for optim in ['Adam', 'RMSprop', 'SGD']:
-            for kinit in ['glorot_normal','random_normal', 'he_normal']:
-                for batch_size in [64,256,1028]:
-                    for epoch in [50,100,200]:
-                        for act in ['relu','tanh','sigmoid']:
-                            for H_layer in [1,2,4,6,8,10]:
-                                for metric in ['mse']:
-                                    for loss in ['mse']:
-                                        for lr in [0.001,0.005]:
-                                            for p in [0,0.2]:
-                                                for num_nodes in np.arange(200,2100,200):
-                                                    for reg in [0]:
-                                                        print(optim, kinit, batch_size, epoch, act, num_nodes, H_layer, metric, loss, lr, p,reg, file=f)
+#        print(optim, kinit, batch_size, epoch, act, num_nodes, H_layer, metric, loss, lr, p,reg, file=f)
     return None
 
 
