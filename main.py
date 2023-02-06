@@ -87,18 +87,6 @@ def plot_final_results(fm):
 
     return None
 
-fm = compute_stat(fm)
-
-##############plots
-barchart_error(fm)
-#plot_final_results(fm)
-
-#############tables#######
-#print_optimal_results(fm)
-#print_SI_table1(fm)
-# print_SI_table2(fm)
-# print_SI_table3(fm)
-
 def avg_stat(fm):
     for j in [fm.LM.exposed, fm.LM.naive, fm.NN.exposed,fm.NN.naive,fm.RNN.exposed,fm.RNN.naive]:
         a,b = [],[]
@@ -107,4 +95,23 @@ def avg_stat(fm):
             b = b + j.pc[i]
         print('%',np.around(np.mean(a),2),np.around(np.std(a),2), j.kind, j.subject, 'NRMSE')
         print('%',np.around(np.mean(b),2),np.around(np.std(b),2), j.kind, j.subject, 'pc')
+
+
+fm = compute_stat(fm)
+
+##############plots
+### All the figure
+barchart_error(fm)
+barchart_params(fm)
+plot_final_results(fm)
+
+#############tables#######
+## all the tables
+print_optimal_results(fm)
+print_SI_table1(fm)
+print_SI_table2(fm)
+print_SI_table3(fm)
+
+#############Stat#######
+# average stat
 avg_stat(fm)
