@@ -15,5 +15,8 @@
 #Code description #pytorch_utilities.py -- contains function for various models (Linear, Neural Network, ....) and generate a file with hyperparameters choices #pytorch.py -- several functions to handle data, perform cross-validation, train model, forward pass, plot and analyse results #analysis*py -- perform cross-validation #plot_results.py -- contains function to estimate validation accuracy, find best hyper-parameters, train final model, plot results and compute statistics
 
 #final trained NN model #Files are heavy to upload, can be downloaded from here: https://www.dropbox.com/sh/svuqdy597d6pg60/AACiWr-kVx_W0bU0AD3HWPNha?dl=0
-#Test data for reproducing the results are provided here, https://www.dropbox.com/sh/6xcandf8qmrs8xc/AADG1xTp7TtwpfTrQYqbzUzDa?dl=0. The full training can be obtained on request to vikranth.harthikotenagaraja@eng.ox.ac.uk
+#Test data for reproducing the results are provided here, 
+Input data --  https://www.dropbox.com/sh/8isp6yl29np6ngo/AAAqRWIc8lTOtYieehUSEQN1a?dl=0
+Output data -- https://www.dropbox.com/sh/7h1oncpyru9vupl/AACm0YPmlmdu2rlabUpynCW4a?dl=0
+The full training can be obtained on request to vikranth.harthikotenagaraja@eng.ox.ac.uk
 
