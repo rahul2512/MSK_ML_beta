@@ -17,12 +17,13 @@ Musculoskeletal Modeling from Inertial Motion Capture Data" #The codes are devel
 #c) Final training and testing can be easily done on any laptop/computer. 
 #d) Code for analysis and plotting is also provided.
 
-#Code description 
-#pytorch_utilities.py -- contains function for various models (Linear, Neural Network, ....) and generate a file with hyperparameters choices 
+#Code description
+#pytorch_utilities.py -- contains function for various models (Linear, Neural Network, RNN, LSTM, GRU,....) and generate a file with hyperparameters choices 
 #read_in_out.py -- contains classes to read input and output data and some other classes for handling the final trained models
-#pytorch.py -- several functions to handle data, perform cross-validation, train model, forward pass, plot and analyse results
+#pytorch.py -- several functions to handle data, perform cross-validation, train model, forward pass, plot and analyse results, plot outputs
 #find_best_model.py -- code for finding the best-fit model using the average validation accuracy. 
 #main.py -- contains function to estimate plot results and compute statistics
+
 
 #final trained NN model #Files are heavy to upload, can be downloaded from here: https://www.dropbox.com/sh/svuqdy597d6pg60/AACiWr-kVx_W0bU0AD3HWPNha?dl=0
 #Test data for reproducing the results are provided here, 
