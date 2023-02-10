@@ -97,21 +97,42 @@ def avg_stat(fm):
         print('%',np.around(np.mean(b),2),np.around(np.std(b),2), j.kind, j.subject, 'pc')
 
 
-fm = compute_stat(fm)
+# fm = compute_stat(fm)
 
-##############plots
-### All the figure
-barchart_error(fm)
-barchart_params(fm)
+# ##############plots
+# ### All the figure
+# barchart_error(fm)
+# barchart_params(fm)
 plot_final_results(fm)
 
-#############tables#######
-## all the tables
-print_optimal_results(fm)
-print_SI_table1(fm)
-print_SI_table2(fm)
-print_SI_table3(fm)
+# #############tables#######
+# ## all the tables
+# print_optimal_results(fm)
+# print_SI_table1(fm)
+# print_SI_table2(fm)
+# print_SI_table3(fm)
 
-#############Stat#######
-# average stat
-avg_stat(fm)
+# #############Stat#######
+# # average stat
+# avg_stat(fm)
+
+#RASI, LASI, RPSI, LPSI, RIC, LIC
+# ax.plot(fm.NN.data.o1.T1['GML'].index,fm.NN.data.o1.T1['GML'], color='blue')
+# ax.plot(fm.NN.data.o1.T2['GML'].index,fm.NN.data.o1.T2['GML'], color='blue')
+# ax.plot(fm.NN.data.o1.T3['GML'].index,fm.NN.data.o1.T3['GML'], color='blue')
+
+# ax.plot(fm.NN.data.o2.T1['GML'].index,fm.NN.data.o2.T1['GML'], color='r')
+# ax.plot(fm.NN.data.o2.T2['GML'].index,fm.NN.data.o2.T2['GML'], color='r')
+# ax.plot(fm.NN.data.o2.T3['GML'].index,fm.NN.data.o2.T3['GML'], color='r')
+
+# ax.plot(fm.NN.data.o3.T1['GML'].index,fm.NN.data.o3.T1['GML'], color='c')
+# ax.plot(fm.NN.data.o3.T2['GML'].index,fm.NN.data.o3.T2['GML'], color='c')
+# ax.plot(fm.NN.data.o3.T3['GML'].index,fm.NN.data.o3.T3['GML'], color='c')
+
+# ax.plot(fm.NN.data.o4.T1['GML'].index,fm.NN.data.o4.T1['GML'], color='m')
+# ax.plot(fm.NN.data.o4.T2['GML'].index,fm.NN.data.o4.T2['GML'], color='m')
+# ax.plot(fm.NN.data.o4.T3['GML'].index,fm.NN.data.o4.T3['GML'], color='m')
+
+# ax.plot(fm.NN.data.o5.T1['GML'].index,fm.NN.data.o5.T1['GML'], color='g')
+# ax.plot(fm.NN.data.o5.T2['GML'].index,fm.NN.data.o5.T2['GML'], color='g')
+# ax.plot(fm.NN.data.o5.T3['GML'].index,fm.NN.data.o5.T3['GML'], color='g')

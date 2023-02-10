@@ -28,6 +28,79 @@ RNN_models = ['SimpleRNN','LSTM','GRU','BSimpleRNN','BLSTM','BGRU']
 feature_list = ['Joint angles','Joint reaction forces','Joint moments',  'Muscle forces', 'Muscle activations']
 feature_slist = ['JA','JRF','JM',  'MF', 'MA']
 
+
+def plot_MSK_data(fm):
+    for feature in fm.feature:
+        col_number = fm.NN.data.o1.numer_of_features[feature]
+        cols = fm.NN.data.o1.T1.columns[col_number]
+        sparse = 10
+        color = ['r','b','g','k','m']
+        std = fm.NN.data.subject_exposed(feature).std
+        if 'JRF' == feature:
+            fig, ax = plt.subplots(4,3,figsize=(8,6),sharex=True)
+            ax_list  = [ax[0,0], ax[0,1], ax[0,2], ax[1,0], ax[1,1], ax[1,2], ax[2,0], ax[2,1], ax[2,2], ax[3,0], ax[3,1], ax[3,2]]
+            ss,b_xlabel = 8,9
+            ylabel = [ 'Trunk \n Mediolateral', 'Trunk \n Proximodistal', 'Trunk \n Anteroposterior', 'Shoulder \n Mediolateral',
+                      'Shoulder \n Proximodistal', 'Shoulder \n Anteroposterior', 'Elbow \n Mediolateral', 'Elbow \n Proximodistal',
+                      'Elbow \n Anteroposterior', 'Wrist \n Mediolateral', 'Wrist \n Proximodistal', 'Wrist \n Anteroposterior']
+            plot_list = ['(a)','(b)','(c)','(d)','(e)','(f)','(g)','(h)','(i)','(j)','(k)','(l)']
+    
+        elif 'MF'  == feature:
+            fig, ax = plt.subplots(2,2,figsize=(4,3),sharex=True)
+            ax_list = [ax[0,0],ax[0,1],ax[1,0] ,ax[1,1]]
+            ss,b_xlabel = 7,1
+            ylabel = ['Pectoralis major \n (Clavicle)','Biceps Brachii','Deltoid (Medial)','Brachioradialis']
+            plot_list = ['(a)','(b)','(c)','(d)','(e)','(f)','(g)','(h)','(i)','(j)','(k)','(l)']
+    
+        elif 'MA' == feature:
+            fig, ax = plt.subplots(2,2,figsize=(4,3),sharex=True)
+            ax_list = [ax[0,0],ax[0,1],ax[1,0] ,ax[1,1]]
+            ss,b_xlabel = 7,1
+            ylabel = ['Pectoralis major \n (Clavicle)','Biceps Brachii','Deltoid (Medial)','Brachioradialis']
+            plot_list = ['(a)','(b)','(c)','(d)','(e)','(f)','(g)','(h)','(i)','(j)','(k)','(l)']
+    
+        elif 'JM' == feature:
+            fig, ax = plt.subplots(4,3,figsize=(8,6),sharex=True)
+            ax_list  = [ax[0,0], ax[0,1], ax[0,2], ax[1,0], ax[1,1], ax[1,2], ax[2,0], ax[2,1], ax[2,2],  ax[3,1]]
+            ax[3,0].remove()
+            ax[3,2].remove()
+            ss,b_xlabel = 8,7
+            ylabel = [ 'Trunk Flexion / \n Extension', 'Trunk Internal / \n External Rotation', 'Trunk Right / \n Left Bending',
+                      'Shoulder Flexion / \n Extension', 'Shoulder Abduction / \n Adduction', 'Shoulder Internal / \n External Rotation',
+                      'Elbow Flexion / \n Extension', 'Elbow Pronation / \n Supination', 'Wrist Flexion / \n Extension', 'Wrist Radial / \n Ulnar Deviation']
+            plot_list = ['(a)','(c)','(b)','(d)','(e)','(f)','(g)','(h)','(i)','(j)','(k)','(l)']
+    
+        elif 'JA' == feature:
+            new_order = [7,8,9,0,1,2,3,4,5,6]
+            cols = cols[new_order]
+            fig, ax = plt.subplots(4,3,figsize=(8,6),sharex=True)
+            ax_list  = [ax[0,0], ax[0,1], ax[0,2], ax[1,0], ax[1,1], ax[1,2], ax[2,0], ax[2,1], ax[2,2], ax[3,1]]
+            ax[3,0].remove()
+            ax[3,2].remove()
+    
+            ss,b_xlabel = 8,7   
+            plot_list = ['(a)','(b)','(c)','(d)','(e)','(f)','(g)','(h)','(i)','(j)']    
+            ylabel = ['Trunk Forward / \n Backward Bending', 'Trunk Right / \n Left Bending', 'Trunk Internal / \n External Rotation',
+                      'Shoulder Flexion / \n Extension', 'Shoulder Abduction / \n Adduction', 'Shoulder Internal / \n External Rotation',
+                      'Elbow Flexion / \n Extension', 'Elbow Pronation / \n Supination', 'Wrist Flexion / \n Extension', 'Wrist Radial / \n Ulnar Deviation']
+    
+        for enum, ax in enumerate(ax_list):
+            for enum1, dsub in enumerate([fm.NN.data.o1,fm.NN.data.o2,fm.NN.data.o3,fm.NN.data.o4,fm.NN.data.o5]):
+                for enum2, dtri in enumerate([dsub.T1, dsub.T2, dsub.T3]):
+                    ax.plot(dtri[cols[enum]][::sparse].index,dtri[cols[enum]][::sparse], color=color[enum1],lw=0.2)
+            ax.set_ylabel(ylabel[enum],fontsize=ss-1)
+            ax.tick_params(axis='x', labelsize=ss-1,   pad=2,length=3,width=0.5,direction= 'inout',which='major')
+            ax.tick_params(axis='x', labelsize=ss-1, pad=2, length=3,width=0.5,direction= 'inout',which='minor')
+            ax.tick_params(axis='y', labelsize=ss-1,   pad=2, length=3,width=0.5,direction= 'inout')
+    
+    
+        plt.tight_layout(h_pad = 0.1)
+        fig.savefig('./plots_out/MSK_data_'+feature+'.pdf',dpi=600)
+        plt.show()
+        plt.close()
+    return None
+
+
 def combined_plot(analysis_opt):
     # it plots the first trial and provides the statistics for each trial as well as average, std, iqr, min,max etc etc
     lll = len(analysis_opt.model_exposed_hyper_arg)
@@ -106,7 +179,7 @@ def combined_plot(analysis_opt):
                 fig = plt.figure(figsize=(8,10.5))
                 gs1 = gridspec.GridSpec(700, 560)
                 gs1.update(left=0.065, right=0.98,top=0.945, bottom=0.06)
-                d1, d2 =10, 10
+                d1, d2 =13, 10
                 ax00 = plt.subplot(gs1[  0+d2:100  ,   0+d1:100 ])
                 ax01 = plt.subplot(gs1[  0+d2:100  , 150+d1:250 ])
                 ax10 = plt.subplot(gs1[120+d2:220  ,   0+d1:100 ])
@@ -239,7 +312,7 @@ def combined_plot(analysis_opt):
                 fig = plt.figure(figsize=(8,8.25))
                 gs1 = gridspec.GridSpec(580, 560)
                 gs1.update(left=0.065, right=0.98,top=0.945, bottom=0.07)
-                d1, d2 =10, 10
+                d1, d2 =13, 10
                 ax00 = plt.subplot(gs1[  0+d2:100  ,   0+d1:100 ])
                 ax01 = plt.subplot(gs1[  0+d2:100  , 150+d1:250 ])
                 ax10 = plt.subplot(gs1[120+d2:220  ,   0+d1:100 ])
