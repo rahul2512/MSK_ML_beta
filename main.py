@@ -3,7 +3,7 @@ import pandas as pd, keras
 import os.path
 from pathlib import Path
 
-from pytorch import run_final_model, run_cross_valid, check_interpolation, combined_plot, save_outputs 
+from pytorch import run_final_model, run_cross_valid, check_interpolation, combined_plot, save_outputs , plot_MSK_data
 from pytorch import RNN_models,  feature_slist, feature_list, print_optimal_results, stat, specific_CV, specific, print_SI_table1, print_SI_table2
 from pytorch import print_SI_table3
 
@@ -98,12 +98,13 @@ def avg_stat(fm):
 
 
 # fm = compute_stat(fm)
+plot_MSK_data(fm)
 
 # ##############plots
 # ### All the figure
 # barchart_error(fm)
 # barchart_params(fm)
-plot_final_results(fm)
+# plot_final_results(fm)
 
 # #############tables#######
 # ## all the tables

@@ -78,23 +78,30 @@ def plot_MSK_data(fm):
             ax[3,0].remove()
             ax[3,2].remove()
     
-            ss,b_xlabel = 8,7   
+            ss,b_xlabel = 8,7
             plot_list = ['(a)','(b)','(c)','(d)','(e)','(f)','(g)','(h)','(i)','(j)']    
             ylabel = ['Trunk Forward / \n Backward Bending', 'Trunk Right / \n Left Bending', 'Trunk Internal / \n External Rotation',
                       'Shoulder Flexion / \n Extension', 'Shoulder Abduction / \n Adduction', 'Shoulder Internal / \n External Rotation',
                       'Elbow Flexion / \n Extension', 'Elbow Pronation / \n Supination', 'Wrist Flexion / \n Extension', 'Wrist Radial / \n Ulnar Deviation']
-    
-        for enum, ax in enumerate(ax_list):
+        sub = ['Subject-1','Subject-2','Subject-3','Subject-4','Subject-5' ]
+        no_lab = ['_no_legend_']*5
+        lab = [sub,no_lab, no_lab]
+        for enum, axu in enumerate(ax_list):
             for enum1, dsub in enumerate([fm.NN.data.o1,fm.NN.data.o2,fm.NN.data.o3,fm.NN.data.o4,fm.NN.data.o5]):
                 for enum2, dtri in enumerate([dsub.T1, dsub.T2, dsub.T3]):
-                    ax.plot(dtri[cols[enum]][::sparse].index,dtri[cols[enum]][::sparse], color=color[enum1],lw=0.2)
-            ax.set_ylabel(ylabel[enum],fontsize=ss-1)
-            ax.tick_params(axis='x', labelsize=ss-1,   pad=2,length=3,width=0.5,direction= 'inout',which='major')
-            ax.tick_params(axis='x', labelsize=ss-1, pad=2, length=3,width=0.5,direction= 'inout',which='minor')
-            ax.tick_params(axis='y', labelsize=ss-1,   pad=2, length=3,width=0.5,direction= 'inout')
-    
-    
-        plt.tight_layout(h_pad = 0.1)
+                    axu.plot(dtri[cols[enum]][::sparse].index,dtri[cols[enum]][::sparse], color=color[enum1],lw=0.2,label = lab[enum2][enum1])
+            axu.set_ylabel(ylabel[enum],fontsize=ss-1)
+            axu.tick_params(axis='x', labelsize=ss-1,   pad=2,length=3,width=0.5,direction= 'inout',which='major')
+            axu.tick_params(axis='x', labelsize=ss-1, pad=2, length=3,width=0.5,direction= 'inout',which='minor')
+            axu.tick_params(axis='y', labelsize=ss-1,   pad=2, length=3,width=0.5,direction= 'inout')
+
+        if feature in  ['JRF','JA','JM']:
+            ax[0,1].legend(fontsize=ss-1,loc = 'upper center',fancybox=True,ncol=5, frameon=True,framealpha=1, borderaxespad=-2.3)   
+            plt.tight_layout(h_pad = 0.1,w_pad = -8)
+        elif feature in  ['MA','MF']:
+            ax[0,1].legend(fontsize=ss-1,loc = 'upper right',fancybox=True,ncol=5, frameon=True,framealpha=1, borderaxespad=-2.3)   
+            plt.tight_layout(h_pad = 0.1,w_pad = -12)
+            
         fig.savefig('./plots_out/MSK_data_'+feature+'.pdf',dpi=600)
         plt.show()
         plt.close()
